@@ -1,6 +1,6 @@
 
 import 'dart:convert';
-import 'package:mockito/mockito.dart';
+//import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 class MyTutorialApp extends StatefulWidget {
@@ -54,7 +54,10 @@ class _MyTutorialAppState extends State<MyTutorialApp> {
                             padding: const EdgeInsets.all(20.0),
                           child: Column(
                             children: [
-                              Text("${snapshot.data![index].price}"),
+                              Image.network(snapshot.data![index].image),
+                              Text("${snapshot.data![index].price}", style: TextStyle(
+                                fontSize: 30, 
+                                color: Colors.deepOrange),),
                               Text(snapshot.data![index].title)
                             ],
                           ),
@@ -95,12 +98,14 @@ class _MyTutorialAppState extends State<MyTutorialApp> {
 class Product {
   final int id;
   final String title;
+  final String image;
   final String description;
   final double price;
 
   Product({
     required this.id,
     required this.title,
+    required this.image,
     required this.description,
     required this.price,
   });
@@ -108,6 +113,7 @@ class Product {
     return Product(
       id: json['id'],
       title: json['title'], 
+      image: json['image'], 
       description: json['description'] ?? 'Pas de description',
       price: (json['price'] is double) ? json['price'] : double.tryParse(json['price'].toString()) ?? 0.0,
     );
