@@ -1,126 +1,47 @@
 
-import 'dart:convert';
+//import 'dart:convert';
 //import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-class MyTutorialApp extends StatefulWidget {
-  const MyTutorialApp ({super.key});
-  @override
-  State<MyTutorialApp> createState() => _MyTutorialAppState();
+import 'package:project/screems/product.screems.dart';
+import 'package:project/screems/product_show.screems.dart';
+void main(){
+  runApp(const MyTutorialApp());
 }
+class MyTutorialApp extends StatelessWidget {
+  const MyTutorialApp ({super.key});
 
-class _MyTutorialAppState extends State<MyTutorialApp> {
-  late Future<List<Product>> futureProduct;
   @override
-  void initState(){
-    super.initState();
-    futureProduct = fetchProducts();
-
-  }
+  Widget build(BuildContext context){
+  return MaterialApp(
+    title:'Products',
+    theme: ThemeData(
+      primarySwatch: Colors.deepPurple,
+    ),
+    routes: {
+      ProductsScreen.routeName: (context) => const ProductsScreen(),
+      ProductShowScreen.routeName: (context) => const ProductShowScreen(),
+    },
+    initialRoute: ProductsScreen.routeName,
+  );
+}
+}
+/*class _MyTutorialAppState extends State<MyTutorialApp> {
+ 
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Networking & APIs',
       theme: ThemeData(
-         primarySwatch: Colors.blue,
+         primarySwatch: Colors.deepPurple,
       ),
-      home: Scaffold(
-        body: SafeArea(
-          child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.purple],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          
-            child: FutureBuilder(
-              future: futureProduct,
-              builder: (context, snapshot){
-                if(snapshot.hasError){
-                  return Center(
-                    child: Text(snapshot.error.toString()),
-                  );
-                }
-                 if(snapshot.hasData){
-                  return Center(
-                    child:ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index){
-                        return Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              Image.network(snapshot.data![index].image),
-                              Text("${snapshot.data![index].price}", style: TextStyle(
-                                fontSize: 30, 
-                                color: Colors.deepOrange),),
-                              Text(snapshot.data![index].title)
-                            ],
-                          ),
-                        ),
-                        );
-                      }),
-                  );
-                 }
-
-
-
-                return Center(child: Text("in progress"));
-              },
-              )
-          ),
-      ),
-    ),
+      routes: {
+        ProductsScreen.routeName: (context) => const ProductsScreen(),
+      },
+      initialRoute: ProductsScreen.routeName,
     );
   }
-
- Future<List<Product>> fetchProducts() async {
-  try {
-    var response = await http.get(Uri.parse("https://fakestoreapi.com/products"));
-    if (response.statusCode == 200) {
-      List<dynamic> document = jsonDecode(response.body);
-      return document.map((product) => Product.fromJson(product)).toList();
-    }
-    throw Exception("Erreur de connexion : ${response.statusCode}");
-  } catch (e) {
-    debugPrint("Erreur lors de la récupération des produits : $e");
-    rethrow;
-  }
-}
-
-
-}
-
-class Product {
-  final int id;
-  final String title;
-  final String image;
-  final String description;
-  final double price;
-
-  Product({
-    required this.id,
-    required this.title,
-    required this.image,
-    required this.description,
-    required this.price,
-  });
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'],
-      title: json['title'], 
-      image: json['image'], 
-      description: json['description'] ?? 'Pas de description',
-      price: (json['price'] is double) ? json['price'] : double.tryParse(json['price'].toString()) ?? 0.0,
-    );
-  }
-}
-
-void main() => runApp(MyTutorialApp());
+*/
 
 
 
